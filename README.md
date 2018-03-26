@@ -23,7 +23,7 @@ This contains some sample data shown below - in this instance with 3 disease gro
 | 0117/0023 | 3     | 8               | 54  | 99  | 1.33 | 0   | 
 | 0217-/006 | 3     | 9               | 33  | 166 | 1.09 | 1   | 
 
-Run the function by typing: ```MatchUp("Matching.csv", final.group.size = ...)```  
+Run the code then in the console type: ```MatchUp("Matching.csv", final.group.size = ...)```  For this test data you can set ```final.group.size = 1```    
 The output is the same CSV file with one extra column appended which denotes whether that subject should be included or not in the matched dataset.
 
 Edit `Matching.csv` as necessary / change `final.group.size` as required.
