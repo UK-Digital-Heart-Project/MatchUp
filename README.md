@@ -26,7 +26,7 @@ This contains some sample data shown below - in this instance with 3 disease gro
 Run the code then in the console type: ```MatchUp("Matching.csv", final.group.size = ...)```  For this test data you can set ```final.group.size = 1```    
 The output is the same CSV file with one extra column appended which denotes whether that subject should be included or not in the matched dataset.
 
-Edit `Matching.csv` as necessary / change `final.group.size` as required.
+Edit `Matching.csv` as necessary and change `final.group.size` as required.
 
 ## Notes
 `Matching.csv` must be (a) .csv format, (b) column names for each column, (c) all covariate names in capitals / no non-covariates in capitals, (d) ID columnname = 'Unique.ID' (NB cases)
