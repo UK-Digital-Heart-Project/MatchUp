@@ -23,7 +23,6 @@ MatchUp<- function (datafile, final.group.size)  {
         # Error messages
           if (length(which(colnames(covariates)==toupper(colnames(covariates))))==0) {return("\n Covariates in uploaded datafile must be indicated by putting the column in upper case please.")}
           if (is.na(which(colnames(covariates)=="Unique.ID"))==TRUE) {return("\n Please label the IDs with the column name: 'Unique.ID'")}
-          if (is.na(which(colnames(covariates)=="Unique.ID"))==TRUE) {return("\n Please label the IDs with the column name: 'Unique.ID'")}
             
         # Scale the data so each covariate is equally weighted in OLS
           covariates.ORIGINAL<- covariates
@@ -45,10 +44,9 @@ MatchUp<- function (datafile, final.group.size)  {
           
           repeat
             {
-              for (i in which(hit.minimum.group.size==FALSE))
+              for (target.group in which(hit.minimum.group.size==FALSE))
                 {
-                  target.group<- i
-                  pooled.groups<- which(hit.minimum.group.size==FALSE)[-i]
+                  pooled.groups<- which(hit.minimum.group.size==FALSE)[-target.group]
                   
                   covariates$NEWGROUP<- rep(0, nrow(covariates))
                   covariates$NEWGROUP[which(covariates$Group %in% target.group == TRUE)]<- 1
@@ -56,10 +54,11 @@ MatchUp<- function (datafile, final.group.size)  {
                   if (sum(covariates$NEWGROUP)<=final.group.size) {hit.minimum.group.size[target.group]<- TRUE; break}
                   if (sum(hit.minimum.group.size[-target.group])==length(hit.minimum.group.size[-target.group])) {no2takeaway<- length(which(covariates$Group==target.group))-final.group.size} else {no2takeaway=1}
                   
-                  m <- glm(NEWGROUP ~ AGE + BSA + SEX + SBP, data = covariates, family=binomial())
+                  f<- paste("NEWGROUP", paste(colnames(covariates)[match.on.these.cols], collapse=" + "), sep=" ~ ")
+                  m <- glm(as.formula(f), data = covariates, family=binomial())
                   prs<- data.frame(ps = predict(m, type = "response"), NEWGROUP = m$model$NEWGROUP)
-                  o<- order(prs$ps[which(prs$NEWGROUP==1)],decreasing=TRUE)
                   
+                  o<- order(prs$ps[which(prs$NEWGROUP==1)],decreasing=TRUE)
                   t<- covariates[which(prs$NEWGROUP==0),]
                   s<- covariates[which(prs$NEWGROUP==1)[o[-(1:no2takeaway)]],]
                   covariates<- rbind(t,s)
