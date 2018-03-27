@@ -6,9 +6,9 @@
 #
 # 1. Type 'getwd()' [Enter] in the Console to find which folder you are in now
 # 2. Put 'Matching.csv' in this folder
-# 3. Run the function below by typing: MatchUp("Matching.csv", final.group.size = ...) [Enter]
-# 4. The output is the same data with one extra column which denotes whether included in the final matching or not
-# 5. Edit 'Matching.csv' as necessary / change final.group.size as suited
+# 3. Run the function below by typing: output<- MatchUp("Matching.csv", final.group.size = ...) [Enter]*
+# 4. The output is now stored in the variable 'output' and can be saved by typing: write.csv(output, file = "Output.csv") [Enter]
+# 5. The output data is the same as the input data with one extra column which denotes whether included in the final matching or not
 
 
 
@@ -19,10 +19,11 @@
 MatchUp<- function (datafile, final.group.size)  {
           options(warn=-1)
           covariates<- read.csv(datafile, header=TRUE)
+          ID.column.number<- which(grepl("ID", colnames(covariates))==TRUE)
           
         # Error messages
           if (length(which(colnames(covariates)==toupper(colnames(covariates))))==0) {return("\n Covariates in uploaded datafile must be indicated by putting the column in upper case please.")}
-          if (is.na(which(colnames(covariates)=="Unique.ID"))==TRUE) {return("\n Please label the IDs with the column name: 'Unique.ID'")}
+          if (sum(ID.column.number)==0) {return("Please include the letters 'ID' in exactly one column to mark the subject identifiers")}
             
         # Scale the data so each covariate is equally weighted in OLS
           covariates.ORIGINAL<- covariates
@@ -68,7 +69,7 @@ MatchUp<- function (datafile, final.group.size)  {
             iter<- iter + 1
             }
           
-          covariates.ORIGINAL$MATCHEDGROUP<- !is.na(match(covariates.ORIGINAL$Unique.ID, covariates$Unique.ID))
+          covariates.ORIGINAL$MATCHEDGROUP<- !is.na(match(covariates.ORIGINAL[,ID.column.number], covariates[,ID.column.number]))
           return (covariates.ORIGINAL)
       }
       
@@ -77,8 +78,9 @@ MatchUp<- function (datafile, final.group.size)  {
 
       
 
-# Notes:
-# Matching.csv must be (a) .csv format, (b) column names for each column, (c) all covariate names in capitals / no non-covariates in capitals, (d) ID columnname = 'Unique.ID' (NB cases)
+# *Notes:
+# Matching.csv must be (a) .csv format, (b) column names for each column, (c) all covariate names in capitals / no non-covariates in capitals, (d) ID columnname must contain the letters, in capitals, "ID", for example:
+# "Unique ID", "Unique.ID", "IDs" would all be fine; "uniqueid","uniqueId","ids" would not be fine.
 # Final.group.size decides the number in each final group. Small samples may lead to non-convergence in the glm, although the warnings for this have been switched off
 
 
