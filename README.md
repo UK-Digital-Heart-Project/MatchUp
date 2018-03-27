@@ -29,7 +29,7 @@ The output is the same CSV file with one extra column appended which denotes whe
 Edit `Matching.csv` as necessary and change `final.group.size` as required. Final group size must not be larger than any of the group sizes.
 
 ## Notes
-`Matching.csv` must be (a) .csv format, (b) column names for each column, (c) column names in capitals will be used for matching, column names not entirely in capitals will not be used for matching, (d) The column name for subjects IDs must be 'Unique.ID'.
+`Matching.csv` must be (a) .csv format, (b) column names for each column, (c) column names in capitals will be used for matching, column names not entirely in capitals will not be used for matching, (d) The column name for subjects IDs must contain the letters, in capitals, "ID".
 
 `Final.group.size` decides the number in each final group. Small samples may lead to non-convergence in the GLM, although the warnings for this have been switched off, so you won't know. Bigger samples will lead to better results...
 
